@@ -10,4 +10,6 @@ import (
 func main() {
 	fmt.Println(nest.Greet("world"))
 	fmt.Println(deeper.Greet("world"))
+
+	// stuff
 }
