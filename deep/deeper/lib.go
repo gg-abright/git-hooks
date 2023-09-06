@@ -1,6 +1,6 @@
 package deeper
 
-// documenting comment
+// documenting
 func Greet(name string) string {
 	return "howdy " + name
 }
