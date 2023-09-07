@@ -41,8 +41,8 @@ def find_file_in_parents(dir, filename, root=os.environ.get("PWD"), stop_at=os.e
     full_filepath = "/".join([root, dir, filename])
 
     while not exists(full_filepath):
-        dir = dir[:dir.rfind("/")]
-        full_filepath = "/".join([root, dir, filename])
+        directory = directory[:directory.rfind("/")]
+        full_filepath = "/".join([root, directory, filename])
 
     return full_filepath.replace("//", "/", -1)
 
@@ -61,9 +61,9 @@ def run_make_target(makefilepath, target):
         return None
 
     # get CWD for `make <target>` to be run in
-    dir = get_directory(makefilepath)
+    directory = get_directory(makefilepath)
 
-    return subprocess.run(["make", target], cwd=dir)
+    return subprocess.run(["make", target], cwd=directory)
 
 # stash uncommitted changes
 stashed = git_stash()
@@ -90,7 +90,7 @@ for makefile in makefiles:
     test_result = run_make_target(makefile, "test")
 
     if test_result is not None and test_result.returncode is not 0:
-        print(f"Tests failed running `make test` in `{dir}`")
+        print(f"Tests failed running `make test` in `{get_directory(makefile)}`")
         if stashed:
             git_unstash()
         exit(1)
