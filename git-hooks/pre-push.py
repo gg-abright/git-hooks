@@ -37,8 +37,8 @@ def git_commit(msg):
 def get_directory(file):
     return file[:file.rfind("/")]
 
-def find_file_in_parents(dir, filename, root=os.environ.get("PWD"), stop_at=os.environ.get("PWD")):
-    full_filepath = "/".join([root, dir, filename])
+def find_file_in_parents(directory, filename, root=os.environ.get("PWD"), stop_at=os.environ.get("PWD")):
+    full_filepath = "/".join([root, directory, filename])
 
     while not exists(full_filepath):
         directory = directory[:directory.rfind("/")]
