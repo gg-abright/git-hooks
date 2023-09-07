@@ -5,8 +5,10 @@ import os
 from os.path import exists
 
 
+# git_stash returns True if files were stashed, False if no files were changed
 def git_stash():
-    subprocess.run(["git", "stash"])
+    stash_cmd = subprocess.run(["git", "stash"], text=True, capture_output=True)
+    return stash_cmd.stdout is not "No local changes to save"
 
 def git_unstash():
     subprocess.run(["git", "stash", "apply"])
@@ -64,7 +66,7 @@ def run_make_target(makefilepath, target):
     return subprocess.run(["make", target], cwd=dir)
 
 # stash uncommitted changes
-git_stash()
+stashed = git_stash()
 
 # get branch
 branch = git_branch()
@@ -89,8 +91,10 @@ for makefile in makefiles:
 
     if test_result is not None and test_result.returncode is not 0:
         print(f"Tests failed running `make test` in `{dir}`")
-        git_unstash()
+        if stashed:
+            git_unstash()
         exit(1)
 
 # apply stash to restore uncommitted changes
-git_unstash()
+if stashed:
+    git_unstash()
