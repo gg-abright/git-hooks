@@ -8,7 +8,7 @@ from os.path import exists
 # git_stash returns True if files were stashed, False if no files were changed
 def git_stash():
     stash_cmd = subprocess.run(["git", "stash"], text=True, capture_output=True)
-    return stash_cmd.stdout is not "No local changes to save"
+    return not "No local changes to save" in stash_cmd.stdout
 
 def git_unstash():
     subprocess.run(["git", "stash", "apply"])
